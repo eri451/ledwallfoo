@@ -7,7 +7,7 @@ import Image
 import ImageDraw
 import ImageFont
 
-from ledwall import LedMatrix
+from ledwall import LedMatrix, const_loop
 
 DEF_COLORS = [(0xff, 0x00, 0x00), (0x00, 0xff, 0x00), (0x00, 0x00, 0xff)]
 DEF_FONT = "DejaVuSans.ttf"
@@ -90,10 +90,10 @@ class FadingText:
 
         im.putdata(self.clean_data)
 
+        return True
+
     def endless(self, snooze=0.1):
-        while True:
-            self.step()
-            time.sleep(snooze)
+        const_loop(self.step, snooze)
 
     def scroll(self, rounds=1, snooze=0.1):
         for _ in range(rounds):
@@ -108,7 +108,10 @@ def main(args):
     else:
         text = u' '.join(arg.decode("utf-8") for arg in args)
 
-    FadingText(matrix, text).endless()
+    try:
+        FadingText(matrix, text).endless()
+    finally:
+        matrix.close()
 
 if __name__ == '__main__':
     import sys
