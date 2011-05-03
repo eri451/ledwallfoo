@@ -76,11 +76,11 @@ class LedMatrix:
         LEDWALL_PRIORITY if it is set.
 
         """
-        if server == None:
-            if 'LEDWALL_IP' in os.environ:
-                server = os.environ['LEDWALL_IP']
-            else:
-                server = "localhost"
+        
+        try:
+          server = "ledwall"
+        except:
+          server = "localhost"
 
         self.lazy_resp = lazy_resp
         self.hang_resp = 0
